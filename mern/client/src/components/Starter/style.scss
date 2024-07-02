@@ -1,0 +1,57 @@
+.starter-select{
+    min-width: 185px;
+    width: fit-content;
+}
+.global-card {
+    background-color: #f4f4f9;
+    border-radius: 10px;
+    padding: 24px;
+    margin: 1.5rem 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.configured-card{
+    background-color: #f4f4f9;
+    border-radius: 10px;
+    padding: 24px;
+    margin: 1.5rem 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: space-between;
+}
+/* Base style for the button */
+.ant-btn {
+    background-color: #42B040;  /* Dark blue background */
+    color: white;               /* White text color */
+    border: none;               /* No border */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and transform */
+}
+
+/* Hover state */
+.ant-btn:hover {
+    background-color: #0a2a57;  /* Slightly lighter blue on hover */
+    cursor: pointer;            /* Pointer cursor on hover */
+}
+
+
+
+/* Active state */
+.ant-btn:active {
+    background-color: #082337;  /* Even darker blue when active */
+    transform: translateY(2px); /* Slight push effect when clicked */
+}
+
+/* Focus state */
+.ant-btn:focus {
+    outline: none;                /* Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(9, 30, 66, 0.5); /* Custom focus style with a subtle glow */
+}
+
+
+// .ant-card{
+//     display: contents;
+//     background-color: #f4f4f9;
+//     border-radius: 10px;
+//     padding: 24px;
+//     margin: 1.5rem 2rem;
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+// }
