@@ -1,9 +1,10 @@
 import React from 'react';
 import { Form, Input, DatePicker, InputNumber, Select, Button, Card } from 'antd';
+import { HOST_ENDPOINT } from '../../components/Starter/Constants';
 const { Option } = Select;
 const InputFields = () => {
   const onFinish = async (values) => {
-    response = await fetch("http://cargo-munshi-server.vercel.app/record/insert", {
+    response = await fetch(`${HOST_ENDPOINT}record/insert`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
