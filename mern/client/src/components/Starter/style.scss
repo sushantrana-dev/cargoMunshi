@@ -2,21 +2,27 @@
     min-width: 185px;
     width: fit-content;
 }
-.global-card {
-    background-color: #f4f4f9;
-    border-radius: 10px;
-    padding: 24px;
-    margin: 1.5rem 2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+.ant-card-head{
+    color: azure !important;
 }
-.configured-card{
-    background-color: #f4f4f9;
+/* Shared Styles */
+.card-common {
     border-radius: 10px;
     padding: 24px;
-    margin: 1.5rem 2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1.5rem;
+    box-shadow: 1px 2px 4px rgba(254, 254, 254, 0.5);
+    font-size: large;
+}
+
+.global-card {
+    background-color: #538392;
+    color: #B3E2A7;
+}
+
+.configured-card {
     display: flex;
-    justify-content: space-between;
+    background-color: hsl(233deg 40.69% 41.23%);
+    justify-content: space-between; /* Specific to configured-card */
 }
 /* Base style for the button */
 .ant-btn {
@@ -46,12 +52,60 @@
     box-shadow: 0 0 0 2px rgba(9, 30, 66, 0.5); /* Custom focus style with a subtle glow */
 }
 
+:where(.css-dev-only-do-not-override-m4timi) {
+    .ant-form-vertical {
+      .ant-form-item:not(.ant-form-item-horizontal) {
+        .ant-form-item-label {
+          > label {
+            margin: 0;
+            color: bisque;
+          }
+        }
+      }
+    }
+  }
 
-// .ant-card{
-//     display: contents;
-//     background-color: #f4f4f9;
-//     border-radius: 10px;
-//     padding: 24px;
-//     margin: 1.5rem 2rem;
-//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-// }
+:where(.css-dev-only-do-not-override-m4timi).ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector.ant-select-selection-placeholder{
+color: aqua;
+}
+.ant-select-selector.ant-select-selection-placeholder{
+    color: inherit;
+}
+.ant-select-arrow{
+    color: aquamarine;
+}
+
+.global-form-flex{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px
+}
+.update-section{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    width: 300px;
+    flex-wrap: wrap;;
+}
+/* Media query for screens smaller than 768px */
+@media (max-width: 768px) {
+    .configured-card {
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .global-card{
+
+    }
+    .nav-bar-mobile{
+        font-size: small;
+    }
+    .ant-card-head-title{
+        text-wrap: wrap;
+    }
+    .update-section{
+
+    }
+
+}
