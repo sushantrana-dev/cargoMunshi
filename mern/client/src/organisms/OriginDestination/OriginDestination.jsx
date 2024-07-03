@@ -33,7 +33,7 @@ const OriginDestinationComp = ({ record, setSpinnerTrue, dbFlow ,selectedOption}
         setSpinnerTrue(true);
         try {
             const queryString = new URLSearchParams(values).toString();
-            const response = await fetch(`http://localhost:5050/record/freightRates?${queryString}`);
+            const response = await fetch(`http://cargo-munshi-server.vercel.app/record/freightRates?${queryString}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -52,14 +52,16 @@ const OriginDestinationComp = ({ record, setSpinnerTrue, dbFlow ,selectedOption}
     };
 
     const openEditModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const closeModal = () => {
+        setFreightKeys([]);
+        setIsModalOpen(false)};
 
     return (
         <>
             {contextHolder}
             {isEmpty(freightKeys) ? (
-                <Card className="global-card" title="Step: 2 Please Select the POD_NAME and DEL_NAME">
-                    <Form form={form} onFinish={handleFormSubmit} layout="vertical">
+                <Card className="global-card card-common " title="Step: 2 Please Select the POD_NAME and DEL_NAME">
+                    <Form form={form} onFinish={handleFormSubmit} layout="vertical" style={{color: 'white'}} className='global-form-flex'>
                         <Form.Item
                             name="podName"
                             label="POD_NAME"
@@ -102,10 +104,10 @@ const OriginDestinationComp = ({ record, setSpinnerTrue, dbFlow ,selectedOption}
             ) : (
                 <>
                     <ModalComponent isModalOpen={isModalOpen} handleOK={closeModal} handleClose={closeModal} />
-                    <Space size="middle" direction="horizontal" className="configured-card">
+                    <Space size="middle" direction="horizontal" className="configured-card card-common">
                         <div className="mt-1 flex gap-3">
-                            <span>Selected POD NAME: <b>{selectedValues.podName}</b></span>
-                            <span>Selected DEL NAME: <b>{selectedValues.delName}</b></span>
+                            <span>Selected POD NAME: {selectedValues.podName}</span>
+                            <span>Selected DEL NAME: {selectedValues.delName}</span>
                         </div>
                         <Button type="primary" icon={<EditOutlined />} onClick={openEditModal}>
                             Edit
