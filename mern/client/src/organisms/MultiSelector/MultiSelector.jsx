@@ -6,6 +6,7 @@ import { EditOutlined } from '@ant-design/icons';
 import ModalComponent from '../Modal/Modal';
 import { isEmpty } from 'lodash';
 import QuotationCard from './Quotation';
+import { HOST_ENDPOINT } from '../../components/Starter/Constants';
 // const [api, contextHolder] = notification.useNotification();
 // const openNotification = ({ message, description, placement = 'top' }) => {
 //     api.info({
@@ -51,7 +52,7 @@ const FreightForm = (props) => {
         const queryString = new URLSearchParams(values).toString();
 
         // Append query string to the base URL
-        const url = `http://cargo-munshi-server.vercel.app/record/freightRates/calculation?${queryString}`;
+        const url = `${HOST_ENDPOINT}record/freightRates/calculation?${queryString}`;
         try {
             const response = await fetch(url);
 
@@ -73,7 +74,7 @@ const FreightForm = (props) => {
         const queryString = new URLSearchParams(values).toString();
 
         // Append query string to the base URL
-        const url = `http://cargo-munshi-server.vercel.app/record/update`;
+        const url = `${HOST_ENDPOINT}record/update`;
         try {
             const response = await fetch(url,
                 {
