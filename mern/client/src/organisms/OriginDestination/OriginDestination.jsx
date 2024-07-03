@@ -4,6 +4,7 @@ import { EditOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
 import ModalComponent from '../Modal/Modal';
 import FreightForm from '../MultiSelector';
+import { HOST_ENDPOINT } from '../../components/Starter/Constants';
 
 const { Option } = Select;
 
@@ -33,7 +34,7 @@ const OriginDestinationComp = ({ record, setSpinnerTrue, dbFlow ,selectedOption}
         setSpinnerTrue(true);
         try {
             const queryString = new URLSearchParams(values).toString();
-            const response = await fetch(`http://cargo-munshi-server.vercel.app/record/freightRates?${queryString}`);
+            const response = await fetch(`${HOST_ENDPOINT}record/freightRates?${queryString}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
