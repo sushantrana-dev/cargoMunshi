@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Card, Select, notification, Space, Button, Typography, Modal, Spin } from 'antd';
 import OriginDestination from '../../organisms/OriginDestination'
-import { SHIPPING_OPTIONS } from './Constants';
+import { HOST_ENDPOINT, SHIPPING_OPTIONS } from './Constants';
 import isEmpty from 'lodash/isEmpty';
 import './style.scss';
 import { formatData } from '../util';
@@ -40,7 +40,7 @@ const Starter = (props) => {
     const fetchData = async () => {
         try {
             const response = await fetch(
-                `http://cargo-munshi-server.vercel.app/record/shippingLine/${selectedOption}`
+                `${HOST_ENDPOINT}record/shippingLine/${selectedOption}`
             );
             console.log('Response:', response);
             setSpinnerTrue(false);
