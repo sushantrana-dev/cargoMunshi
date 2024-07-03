@@ -20,7 +20,7 @@ const QuotationCard = ({ quotation }) => {
 
   return (
     <>
-      <Card title="Quotation" className='global-card'>
+      <Card title="Quotation" className='global-card card-common '>
         {/* <p>Destination Cost: {quotation?.DESTINATION_COST}</p>
         <p>Ocean Freight: {quotation?.OCEAN_FREIGHT}</p> */}
         <div className="inline-grid gap-3">

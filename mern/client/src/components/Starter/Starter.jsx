@@ -40,7 +40,7 @@ const Starter = (props) => {
     const fetchData = async () => {
         try {
             const response = await fetch(
-                `http://localhost:5050/record/shippingLine/${selectedOption}`
+                `http://cargo-munshi-server.vercel.app/record/shippingLine/${selectedOption}`
             );
             console.log('Response:', response);
             setSpinnerTrue(false);
@@ -83,7 +83,7 @@ const Starter = (props) => {
     return (
         <Spin
             spinning={spinnerTrue}>
-            <Card title={cardTitle}>
+            <Card title={cardTitle} className='global-card'>
                 {contextHolder} {/* Notification holder */}
                 {
                     (!isEmpty(record)) ?
@@ -99,7 +99,7 @@ const Starter = (props) => {
                                 >
                                     <p>Editing will revert all the Changes</p>
                                 </Modal>
-                                <Space size="middle" direction="horizontal" className='configured-card'>
+                                <Space size="middle" direction="horizontal" className='configured-card card-common '>
                                     <div className='mt-1'>Selected Shipping Line : <Space />
                                         <b>{selectedOption}</b>
                                     </div>
@@ -112,7 +112,7 @@ const Starter = (props) => {
                         )
                         :
                         (
-                            <Card className='global-card' title="Step:1 Please Select the Shipping Line">
+                            <Card className='global-card card-common ' title="Step:1 Please Select the Shipping Line">
                                 <Space>
                                     <Select
                                         className='starter-select'
