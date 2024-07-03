@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { HOST_ENDPOINT } from "./Starter/Constants";
 
 const Record = (props) => (
   <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
@@ -41,7 +42,7 @@ export default function RecordList() {
   // This method fetches the records from the database.
   useEffect(() => {
     async function getRecords() {
-      const response = await fetch(`http://cargo-munshi-server.vercel.app/record/`);
+      const response = await fetch(`${HOST_ENDPOINT}record/`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
         console.error(message);
@@ -56,7 +57,7 @@ export default function RecordList() {
 
   // This method will delete a record
   async function deleteRecord(id) {
-    await fetch(`http://cargo-munshi-server.vercel.app/record/${id}`, {
+    await fetch(`${HOST_ENDPOINT}record/${id}`, {
       method: "DELETE",
     });
     const newRecords = records.filter((el) => el._id !== id);
