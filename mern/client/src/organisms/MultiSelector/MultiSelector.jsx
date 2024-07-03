@@ -16,7 +16,7 @@ import QuotationCard from './Quotation';
 // };
 const FreightForm = (props) => {
     const { freightKeys, dbFlow, selectedOption } = props;
-    console.log('freightKeys', selectedOption);
+    // console.log('freightKeys', selectedOption);
     const [selectedIncoTerm, setSelectedIncoTerm] = useState('');
     const [formMS] = Form.useForm();
     const [quotation, setQuotation] = useState({});
@@ -51,7 +51,7 @@ const FreightForm = (props) => {
         const queryString = new URLSearchParams(values).toString();
 
         // Append query string to the base URL
-        const url = `http://localhost:5050/record/freightRates/calculation?${queryString}`;
+        const url = `http://cargo-munshi-server.vercel.app/record/freightRates/calculation?${queryString}`;
         try {
             const response = await fetch(url);
 
@@ -73,15 +73,16 @@ const FreightForm = (props) => {
         const queryString = new URLSearchParams(values).toString();
 
         // Append query string to the base URL
-        const url = `http://localhost:5050/record/update`;
+        const url = `http://cargo-munshi-server.vercel.app/record/update`;
         try {
             const response = await fetch(url,
-                {method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({...values,shipping_line: selectedOption, pod_name: freightKeys?.[0].POD_NAME, del_name:freightKeys?.[0].DEL_NAME}),
-              });
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ ...values, shipping_line: selectedOption, pod_name: freightKeys?.[0].POD_NAME, del_name: freightKeys?.[0].DEL_NAME }),
+                });
 
             if (!response.ok) {
                 // openNotification({ message: response.status, description: 'Please try again later' })
@@ -103,18 +104,18 @@ const FreightForm = (props) => {
     const onFinish = async (values) => {
         console.log('Received values from onFinish: ', values);
         // console.log('Full Form Values:', formMS.getFieldsValue(true));
-        const returnedVals = dbFlow ? await updateDb(values) :await fetchData(values);
+        const returnedVals = dbFlow ? await updateDb(values) : await fetchData(values);
         console.log('selectOptions', returnedVals);
         setQuotation(returnedVals);
         setSelectedValues(values);
     };
 
     return (
-<>
-      {/* {contextHolder} */}
+        <>
+            {/* {contextHolder} */}
             {isEmpty(quotation) ?
-                <Card title="Step:3" className='global-card'>
-                    <Form layout="vertical"
+                <Card title="Step:3" className='global-card card-common '>
+                    <Form layout="vertical" className='global-form-flex'
                         form={formMS}
                         onFinish={onFinish}>
                         <Form.Item label="PER" name="per">
@@ -138,52 +139,55 @@ const FreightForm = (props) => {
                         <Form.Item label="Weight Range" name="weightRange">
                             <Input placeholder="Enter Weight in KG" />
                         </Form.Item>
-                        {!dbFlow ? (<><Form.Item label="INCO TERMS" name="incoTerms">
+                        {!dbFlow ? (<>
+                        <div>
+                        <Form.Item label="INCO TERMS" name="incoTerms">
                             <Radio.Group onChange={e => setSelectedIncoTerm(e.target.value)}>
-                                <Radio value="EX_WORKS">EX WORKS</Radio>
-                                <Radio value="FCA">FCA</Radio>
-                                <Radio value="FOB">FOB</Radio>
+                                <Radio value="EX_WORKS" className='text-white'>EX WORKS</Radio>
+                                <Radio value="FCA" className='text-white'>FCA</Radio>
+                                <Radio value="FOB" className='text-white'>FOB</Radio>
                             </Radio.Group>
                         </Form.Item>
-                            <>{(selectedIncoTerm === 'EX_WORKS' || selectedIncoTerm === 'FCA') && (
+                            <div>{(selectedIncoTerm === 'EX_WORKS' || selectedIncoTerm === 'FCA') && (
                                 <>
                                     <Form.Item label={`${selectedIncoTerm} Exchange Rate`} name="incoExchangeRate">
-                                        <Input placeholder={`Enter ${selectedIncoTerm} Exchange Rate`} />
+                                        <InputNumber min={0} placeholder={`Enter ${selectedIncoTerm} Exchange Rate`} className='w-auto' />
                                     </Form.Item>
                                     <Form.Item label={`Price Rate`} name="incoPriceRate">
-                                        <Input placeholder={`Enter ${selectedIncoTerm} PRICE Rate`} />
+                                        <InputNumber min={0} placeholder={`Enter ${selectedIncoTerm} PRICE Rate`} className='w-auto' />
                                     </Form.Item>
                                 </>
-                            )}</>
+                            )}</div>
+                            </div>
                             <Form.Item label="Ocean Freight Price" name="oceanFreightExPrice">
-                                <Input
+                                <InputNumber min={0} placeholder="Enter Price" className='w-auto'
                                 />
                             </Form.Item>
                             <Form.Item label="Ocean Freight Exchange Rate" name="oceanFreightExRate">
-                                <Input
+                                <InputNumber min={0} placeholder="Enter Exchange Rate" className='w-auto'
                                 />
                             </Form.Item></>) :
-                            <> Enter the Values to be Updated in the DB
+                            <div className='update-section'> Enter the Values to be Updated in the DB
                                 <Form.Item name="DESTINATION_COST_THC" label="THC Cost">
-                                    <InputNumber />
+                                    <InputNumber min={0} />
                                 </Form.Item>
                                 <Form.Item name="DESTINATION_COST_IHC" label="IHC Cost">
-                                    <InputNumber />
+                                    <InputNumber min={0} />
                                 </Form.Item>
                                 <Form.Item name="DESTINATION_COST_LOCAL_AND_DO" label="Local and DO Cost">
-                                    <InputNumber />
+                                    <InputNumber min={0} />
                                 </Form.Item>
                                 <Form.Item name="DESTINATION_COST_CIS" label="CIS Cost">
-                                    <InputNumber />
-                                </Form.Item></>}
+                                    <InputNumber min={0} />
+                                </Form.Item></div>}
                         <Form.Item>
                             <Button size="large" type="primary" htmlType="submit">
                                 {dbFlow ? 'Make Updations' : 'Get Quotation'}
                             </Button>
                         </Form.Item>
                     </Form></Card> : <> <ModalComponent isModalOpen={isModalOpen} handleOK={toggleModalFlags} handleClose={toggleModalFlagClose} />
-                    <Space size="middle" direction="horizontal" className='configured-card'>
-                        <div className='mt-1 flex gap-4'><span>Selected cargoType:
+                    <Space size="middle" direction="horizontal" className='configured-card card-common'>
+                        <div className='mt-1 flex gap-4 flex-wrap'><span>Selected cargoType:
                             <b>{selectedValues?.cargoType}</b></span>
                             <span>Selected Inco Term :
                                 <b>{selectedValues?.incoTerms}</b></span>
