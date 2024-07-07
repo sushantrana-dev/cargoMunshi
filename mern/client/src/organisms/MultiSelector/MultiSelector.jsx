@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Radio, Card, Space, InputNumber, notification } from 'antd';
-import { formatData, formatWeightRanges, getUniqueOptions } from '../../components/util';
+import { Form, Input, Button, Select, Radio, Card, Space, InputNumber, notification, Modal } from 'antd';
+import { formatData, getUniqueOptions } from '../../components/util';
 import '../../components/Starter/style.scss';
 import { EditOutlined } from '@ant-design/icons';
 import ModalComponent from '../Modal/Modal';
 import { isEmpty } from 'lodash';
 import QuotationCard from './Quotation';
+import { HOST_ENDPOINT } from '../../components/Starter/Constants';
 // const [api, contextHolder] = notification.useNotification();
 // const openNotification = ({ message, description, placement = 'top' }) => {
 //     api.info({
@@ -15,10 +16,9 @@ import QuotationCard from './Quotation';
 //     });
 // };
 const FreightForm = (props) => {
-    const { freightKeys, dbFlow, selectedOption } = props;
-    // console.log('freightKeys', selectedOption);
+    const { freightKeys, dbFlow, selectedOption, selectedValues: originDestination } = props;
     const [selectedIncoTerm, setSelectedIncoTerm] = useState('');
-    const [formMS] = Form.useForm();
+    const [form] = Form.useForm();
     const [quotation, setQuotation] = useState({});
     const [selectedValues, setSelectedValues] = useState({});
     const [selectOptions, setSelectOptions] = useState({
@@ -47,11 +47,13 @@ const FreightForm = (props) => {
         loadData();
     }, []);
     async function fetchData(values) {
+
+        const allParameters = { ...values, podName: originDestination?.podName, delName: originDestination?.delName, shippingLine: selectedOption };
         // Construct query string from params object
-        const queryString = new URLSearchParams(values).toString();
+        const queryString = new URLSearchParams(allParameters).toString();
 
         // Append query string to the base URL
-        const url = `http://cargo-munshi-server.vercel.app/record/freightRates/calculation?${queryString}`;
+        const url = `${HOST_ENDPOINT}record/freightRates/calculation?${queryString}`;
         try {
             const response = await fetch(url);
 
@@ -73,7 +75,7 @@ const FreightForm = (props) => {
         const queryString = new URLSearchParams(values).toString();
 
         // Append query string to the base URL
-        const url = `http://cargo-munshi-server.vercel.app/record/update`;
+        const url = `${HOST_ENDPOINT}record/update`;
         try {
             const response = await fetch(url,
                 {
@@ -103,7 +105,7 @@ const FreightForm = (props) => {
 
     const onFinish = async (values) => {
         console.log('Received values from onFinish: ', values);
-        // console.log('Full Form Values:', formMS.getFieldsValue(true));
+        // console.log('Full Form Values:', form.getFieldsValue(true));
         const returnedVals = dbFlow ? await updateDb(values) : await fetchData(values);
         console.log('selectOptions', returnedVals);
         setQuotation(returnedVals);
@@ -114,95 +116,122 @@ const FreightForm = (props) => {
         <>
             {/* {contextHolder} */}
             {isEmpty(quotation) ?
-                <Card title="Step:3" className='global-card card-common '>
-                    <Form layout="vertical" className='global-form-flex'
-                        form={formMS}
-                        onFinish={onFinish}>
-                        <Form.Item label="PER" name="per">
-                            <Select
-                                showSearch
-                                placeholder="Select PER"
-                                optionFilterProp="label"
-                                onChange={(value) => form.setFieldsValue({ PER: value })}
-                                options={selectOptions?.PER ?? []}
-                            />
-                        </Form.Item>
-                        <Form.Item label="Cargo Type" name="cargoType">
-                            <Select
-                                showSearch
-                                placeholder="Select PER"
-                                optionFilterProp="label"
-                                onChange={(value) => form.setFieldsValue({ CARGO_TYPE: value })}
-                                options={selectOptions?.CARGO_TYPE ?? []}
-                            />
-                        </Form.Item>
-                        <Form.Item label="Weight Range" name="weightRange">
-                            <Input placeholder="Enter Weight in KG" />
-                        </Form.Item>
-                        {!dbFlow ? (<>
-                        <div>
-                        <Form.Item label="INCO TERMS" name="incoTerms">
-                            <Radio.Group onChange={e => setSelectedIncoTerm(e.target.value)}>
-                                <Radio value="EX_WORKS" className='text-white'>EX WORKS</Radio>
-                                <Radio value="FCA" className='text-white'>FCA</Radio>
-                                <Radio value="FOB" className='text-white'>FOB</Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                            <div>{(selectedIncoTerm === 'EX_WORKS' || selectedIncoTerm === 'FCA') && (
-                                <>
-                                    <Form.Item label={`${selectedIncoTerm} Exchange Rate`} name="incoExchangeRate">
-                                        <InputNumber min={0} placeholder={`Enter ${selectedIncoTerm} Exchange Rate`} className='w-auto' />
-                                    </Form.Item>
-                                    <Form.Item label={`Price Rate`} name="incoPriceRate">
-                                        <InputNumber min={0} placeholder={`Enter ${selectedIncoTerm} PRICE Rate`} className='w-auto' />
-                                    </Form.Item>
-                                </>
-                            )}</div>
-                            </div>
-                            <Form.Item label="Ocean Freight Price" name="oceanFreightExPrice">
-                                <InputNumber min={0} placeholder="Enter Price" className='w-auto'
-                                />
-                            </Form.Item>
-                            <Form.Item label="Ocean Freight Exchange Rate" name="oceanFreightExRate">
-                                <InputNumber min={0} placeholder="Enter Exchange Rate" className='w-auto'
-                                />
-                            </Form.Item></>) :
-                            <div className='update-section'> Enter the Values to be Updated in the DB
-                                <Form.Item name="DESTINATION_COST_THC" label="THC Cost">
-                                    <InputNumber min={0} />
-                                </Form.Item>
-                                <Form.Item name="DESTINATION_COST_IHC" label="IHC Cost">
-                                    <InputNumber min={0} />
-                                </Form.Item>
-                                <Form.Item name="DESTINATION_COST_LOCAL_AND_DO" label="Local and DO Cost">
-                                    <InputNumber min={0} />
-                                </Form.Item>
-                                <Form.Item name="DESTINATION_COST_CIS" label="CIS Cost">
-                                    <InputNumber min={0} />
-                                </Form.Item></div>}
-                        <Form.Item>
-                            <Button size="large" type="primary" htmlType="submit">
-                                {dbFlow ? 'Make Updations' : 'Get Quotation'}
-                            </Button>
-                        </Form.Item>
-                    </Form></Card> : <> <ModalComponent isModalOpen={isModalOpen} handleOK={toggleModalFlags} handleClose={toggleModalFlagClose} />
+                <Card title="Step:3" bordered={false} className='global-card card-common '>
+                   <Form layout="vertical" className='global-form-flex'
+      form={form}
+      onFinish={onFinish}>
+    <Form.Item label="PER" name="per"
+               rules={[{ required: true, message: 'Please select a PER' }]}>
+        <Select
+            showSearch
+            placeholder="Select PER"
+            optionFilterProp="label"
+            onChange={(value) => form.setFieldsValue({ PER: value })}
+            options={selectOptions?.PER ?? []}
+        />
+    </Form.Item>
+    <Form.Item label="Cargo Type" name="cargoType"
+               rules={[{ required: true, message: 'Please select a cargo type' }]}>
+        <Select
+            showSearch
+            placeholder="Select Cargo Type"
+            optionFilterProp="label"
+            onChange={(value) => form.setFieldsValue({ CARGO_TYPE: value })}
+            options={selectOptions?.CARGO_TYPE ?? []}
+        />
+    </Form.Item>
+    <Form.Item label="Weight in Metric Tonnes" name="weightRange"
+               rules={[{ required: true, message: 'Please enter the weight in MT' }]}>
+        <InputNumber min={0} placeholder="Enter Weight in MT" className='w-auto'/>
+    </Form.Item>
+    {!dbFlow ? (
+        <div className='flex gap-3'>
+            <Form.Item label="INCO TERMS" name="incoTerms"
+                       rules={[{ required: true, message: 'Please select INCO terms' }]}>
+                <Radio.Group onChange={e => setSelectedIncoTerm(e.target.value)}>
+                    <Radio className='text-white' value="EX_WORKS">EX WORKS</Radio>
+                    <Radio className='text-white' value="FCA">FCA</Radio>
+                    <Radio className='text-white' value="FOB">FOB</Radio>
+                </Radio.Group>
+            </Form.Item>
+            <div>{(selectedIncoTerm === 'EX_WORKS' || selectedIncoTerm === 'FCA') && (
+                <>
+                    <Form.Item label={`${selectedIncoTerm} Exchange Rate`} name="incoExchangeRate"
+                               rules={[{ required: true, message: `Please enter ${selectedIncoTerm} Exchange Rate` }]}>
+                        <InputNumber className='w-auto' min={0} placeholder={`Enter ${selectedIncoTerm} Exchange Rate`} />
+                    </Form.Item>
+                    <Form.Item label={`Price Rate`} name="incoPriceRate"
+                               rules={[{ required: true, message: `Please enter ${selectedIncoTerm} PRICE Rate` }]}>
+                        <InputNumber min={0} placeholder={`Enter ${selectedIncoTerm} PRICE Rate`} className='w-auto' />
+                    </Form.Item>
+                </>
+            )}</div>
+            <Form.Item label="Ocean Freight Price" name="oceanFreightExPrice"
+                       rules={[{ required: true, message: 'Please enter the Ocean Freight Price' }]}>
+                <InputNumber min={0} placeholder="Enter Price" className='w-auto' />
+            </Form.Item>
+            <Form.Item label="Ocean Freight Exchange Rate" name="oceanFreightExRate"
+                       rules={[{ required: true, message: 'Please enter the Ocean Freight Exchange Rate' }]}>
+                <InputNumber min={0} placeholder="Enter Exchange Rate" className='w-auto' />
+            </Form.Item>
+        </div>
+    ) :
+        <div className='update-section'> Enter the Values to be Updated in the DB
+            <Form.Item name="DESTINATION_COST_THC" label="THC Cost"
+                       rules={[{ required: true, message: 'Please enter the THC Cost' }]}>
+                <InputNumber min={0} />
+            </Form.Item>
+            <Form.Item name="DESTINATION_COST_IHC" label="IHC Cost"
+                       rules={[{ required: true, message: 'Please enter the IHC Cost' }]}>
+                <InputNumber min={0} />
+            </Form.Item>
+            <Form.Item name="DESTINATION_COST_LOCAL_AND_DO" label="Local and DO Cost"
+                       rules={[{ required: true, message: 'Please enter the Local and DO Cost' }]}>
+                <InputNumber min={0} />
+            </Form.Item>
+            <Form.Item name="DESTINATION_COST_CIS" label="CIS Cost"
+                       rules={[{ required: true, message: 'Please enter the CIS Cost' }]}>
+                <InputNumber min={0} />
+            </Form.Item>
+        </div>}
+    <Form.Item>
+        <Button size="large" type="primary" htmlType="submit">
+            {dbFlow ? 'Make Updates' : 'Get Quotation'}
+        </Button>
+    </Form.Item>
+</Form></Card> : <> <ModalComponent isModalOpen={isModalOpen} handleOK={toggleModalFlags} handleClose={toggleModalFlagClose} />
                     <Space size="middle" direction="horizontal" className='configured-card card-common'>
-                        <div className='mt-1 flex gap-4 flex-wrap'><span>Selected cargoType:
-                            <b>{selectedValues?.cargoType}</b></span>
-                            <span>Selected Inco Term :
-                                <b>{selectedValues?.incoTerms}</b></span>
-                            <span>Selected Ocean Freight Rate :
-                                <b>{selectedValues?.oceanFreightExRate}</b></span>
+                        <div className='m-4 flex gap-2 flex-wrap'><span>Selected cargoType:
+                            <b> {selectedValues?.cargoType}</b></span>
                             <span>Selected PER :
-                                <b>{selectedValues?.per}</b></span>
-                            <span>Selected Weight Range:
-                                <b>{selectedValues?.weightRange}</b></span>
+                                <b> {selectedValues?.per} Pieces</b></span>
+                            <span>Selected Weight:
+                                <b> {selectedValues?.weightRange} Mt</b></span>
+                            <span>Selected Inco Term :
+                                <b> {selectedValues?.incoTerms}</b></span>
+                            <span>Selected Ocean Freight Rate :
+                                <b> {selectedValues?.oceanFreightExRate}</b></span>
+
                         </div>
                         <Button type="primary" icon={<EditOutlined />} onClick={() => { setIsModalOpen(true) }} >
                             Edit
                         </Button>
                     </Space>
-                    <QuotationCard quotation={quotation} />
+                    {/* <Modal centered open={true} 
+                    footer={[
+          <Button key="submit" onClick={toggleModalFlagClose}>
+            Print
+          </Button>,
+          <Navigate to="/" key="cancel" type="primary">
+            Start Again
+          </Navigate>,
+        ]} handleOK={toggleModalFlags} handleClose={toggleModalFlagClose}>
+                        
+                    </Modal> */}
+                    <QuotationCard selectedValues={{
+                        shippingLine: selectedOption,
+                        odValues: originDestination,
+                    }} quotation={quotation} />
                 </>}</>
     );
 };

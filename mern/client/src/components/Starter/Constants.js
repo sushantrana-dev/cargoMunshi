@@ -28,3 +28,6 @@ export const SHIPPING_OPTIONS = [
         label: 'ESL',
     },
 ];
+
+export const HOST_ENDPOINT = 'https://cargo-munshi-server.vercel.app/';
+// export const HOST_ENDPOINT = 'http://localhost:5050/';

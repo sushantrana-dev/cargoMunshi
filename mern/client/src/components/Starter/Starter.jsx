@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
-import { Card, Select, notification, Space, Button, Typography, Modal, Spin } from 'antd';
+import { Card, Select, notification, Space, Button, Typography, Modal, Spin, Image } from 'antd';
 import OriginDestination from '../../organisms/OriginDestination'
-import { SHIPPING_OPTIONS } from './Constants';
+import { HOST_ENDPOINT, SHIPPING_OPTIONS } from './Constants';
 import isEmpty from 'lodash/isEmpty';
 import './style.scss';
-import { formatData } from '../util';
 import { EditOutlined } from '@ant-design/icons';
+import shipGif from '../../../public/assets/ship.gif';
+
 const Starter = (props) => {
     const { dbFlow } = props;
     const [selectedOption, setSelectedOption] = useState('');
@@ -40,7 +41,7 @@ const Starter = (props) => {
     const fetchData = async () => {
         try {
             const response = await fetch(
-                `http://cargo-munshi-server.vercel.app/record/shippingLine/${selectedOption}`
+                `${HOST_ENDPOINT}record/shippingLine/${selectedOption}`
             );
             console.log('Response:', response);
             setSpinnerTrue(false);
@@ -83,7 +84,7 @@ const Starter = (props) => {
     return (
         <Spin
             spinning={spinnerTrue}>
-            <Card title={cardTitle} className='global-card'>
+            <Card title={<div className='break-words'>{cardTitle}</div>} className='global-card card-common'>
                 {contextHolder} {/* Notification holder */}
                 {
                     (!isEmpty(record)) ?
@@ -100,7 +101,7 @@ const Starter = (props) => {
                                     <p>Editing will revert all the Changes</p>
                                 </Modal>
                                 <Space size="middle" direction="horizontal" className='configured-card card-common '>
-                                    <div className='mt-1'>Selected Shipping Line : <Space />
+                                    <div className='selected-shipping'><Image src={shipGif} height='35px' alt="Ship icon"/>Selected Shipping Line : <Space />
                                         <b>{selectedOption}</b>
                                     </div>
                                     <Button type="primary" icon={<EditOutlined />} onClick={toggleModalFlags} >
@@ -112,7 +113,7 @@ const Starter = (props) => {
                         )
                         :
                         (
-                            <Card className='global-card card-common ' title="Step:1 Please Select the Shipping Line">
+                            <Card bordered={false} className='global-card card-common ' title="Step:1 Please Select the Shipping Line">
                                 <Space>
                                     <Select
                                         className='starter-select'

@@ -144,7 +144,7 @@ router.get("/freightRates/calculation", async (req, res) => {
       const GST_5 = OCEAN_FREIGHT * 0.05;
       const GST_18 = (DESTINATION_COST + ((req.query?.incoPriceRate ?? 0) * (req.query.incoExchangeRate ?? 1))) * 0.18;
       const TOTAL_COST_WITH_GST = DESTINATION_COST + OCEAN_FREIGHT + GST_5 + GST_18;
-      const TOTAL_COST={DESTINATION_COST,OCEAN_FREIGHT,GST_5,GST_18,TOTAL_COST_WITH_GST };
+      const TOTAL_COST={DESTINATION_COST,OCEAN_FREIGHT,GST_5,GST_18,TOTAL_COST_WITH_GST, IHC : result[0]?.DESTINATION_COST?.IHC,LOCAL_AND_DO: result[0]?.DESTINATION_COST?.LOCAL_AND_DO , THC: result[0]?.DESTINATION_COST?.THC, CIS: result[0]?.DESTINATION_COST?.CI};
       res.status(200).send(TOTAL_COST);
     }
   } catch (error) {

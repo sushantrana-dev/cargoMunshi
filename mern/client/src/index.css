@@ -12,17 +12,15 @@
     -ms-flex-flow: column;
     flex-flow: column;
     min-height: 100vh;
-    background-color: hsl(231, 30%, 11%);
+    --tw-bg-opacity: 1;
+    background-color: rgb(30 41 59/var(--tw-bg-opacity));
     -webkit-transition: background-color 400ms ease-in-out;
     transition: background-color 400ms ease-in-out;
-    
     font-family: 'Spartan', sans-serif;
-    font-weight: 700;
     font-size: clamp(1.25rem,5vw,2rem);
     -webkit-letter-spacing: -0.04rem;
     -moz-letter-spacing: -0.04rem;
     -ms-letter-spacing: -0.04rem;
-    letter-spacing: -0.04rem;
     color: hsl(0, 0%, 100%);
     -webkit-transition: color 400ms ease-in;
     transition: color 400ms ease-in;
