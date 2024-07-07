@@ -8,25 +8,30 @@
 /* Shared Styles */
 .card-common {
     border-radius: 10px;
-    padding: 24px;
+    padding: 0.25rem;
     margin-bottom: 1.5rem;
-    box-shadow: 1px 2px 4px rgba(254, 254, 254, 0.5);
+    box-shadow: inset 0 1px 0 0 #ffffff1a;
     font-size: large;
+    color: aliceblue;
 }
 
 .global-card {
-    background-color: #538392;
-    color: #B3E2A7;
+    border-radius: .375rem;
+    --tw-bg-opacity: 1;
+    background-color:rgb(51 65 85 / var(--tw-bg-opacity));
 }
 
 .configured-card {
+    height: 70px;
+    color: black;
     display: flex;
-    background-color: hsl(233deg 40.69% 41.23%);
+    background-color: white;
     justify-content: space-between; /* Specific to configured-card */
 }
 /* Base style for the button */
 .ant-btn {
-    background-color: #42B040;  /* Dark blue background */
+    // box-shadow:1px 1px 6px 2px #ff5ac1;
+    background-color:rgb(59 130 246);
     color: white;               /* White text color */
     border: none;               /* No border */
     transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and transform */
@@ -34,11 +39,8 @@
 
 /* Hover state */
 .ant-btn:hover {
-    background-color: #0a2a57;  /* Slightly lighter blue on hover */
     cursor: pointer;            /* Pointer cursor on hover */
 }
-
-
 
 /* Active state */
 .ant-btn:active {
@@ -52,20 +54,20 @@
     box-shadow: 0 0 0 2px rgba(9, 30, 66, 0.5); /* Custom focus style with a subtle glow */
 }
 
-:where(.css-dev-only-do-not-override-m4timi) {
-    .ant-form-vertical {
-      .ant-form-item:not(.ant-form-item-horizontal) {
-        .ant-form-item-label {
-          > label {
-            margin: 0;
-            color: bisque;
-          }
-        }
-      }
-    }
-  }
 
-:where(.css-dev-only-do-not-override-m4timi).ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector.ant-select-selection-placeholder{
+.ant-form-vertical {
+    .ant-form-item:not(.ant-form-item-horizontal) {
+    .ant-form-item-label {
+        > label {
+        margin: 0;
+        color: aliceblue;
+        }
+    }
+    }
+}
+
+
+.ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector.ant-select-selection-placeholder{
 color: aqua;
 }
 .ant-select-selector.ant-select-selection-placeholder{
@@ -76,36 +78,107 @@ color: aqua;
 }
 
 .global-form-flex{
+    margin-left: 150px;
+    width: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
-    gap: 12px
+    gap: 12px;
+    align-items: center;
 }
 .update-section{
+    color: aliceblue;
     display: flex;
     justify-content: space-between;
     gap: 12px;
     width: 300px;
     flex-wrap: wrap;;
 }
+.statistic-header{
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+.statistic-value{
+    color: aliceblue;
+    font-size: 1.5rem;
+    font-weight: bold; 
+}
+.statistic-internal-value{
+    color: #484747;
+    font-size: '1rem';
+    font-weight: 'bold'; 
+}
+
+.selected-od{
+    margin: 8px;
+    display: flex;
+    gap: 16px;
+}
+
+.selected-shipping{
+    margin: 8px;
+    display: flex;
+    gap: 16px;
+    justify-content: baseline;
+    align-items: center;
+}
 /* Media query for screens smaller than 768px */
 @media (max-width: 768px) {
     .configured-card {
+        height: auto;
         justify-content: center;
         display: flex;
         flex-wrap: wrap;
+        font-size: medium;
     }
     .global-card{
 
     }
     .nav-bar-mobile{
+        gap: 20px;
         font-size: small;
     }
     .ant-card-head-title{
         text-wrap: wrap;
+        font-size: small;
     }
-    .update-section{
-
+    .ant-card-body{
+        font-size: small;
+        padding: 0.25rem;
+    }
+    .statistic-header{
+        display: flex;
+        justify-content: space-between;
+        gap: 0.25rem;
+        flex-direction: column;
+    }
+    .statistic-value{
+        color: aliceblue;
+        font-size: large;
+    }
+    .statistic-internal-value{
+        color: #484747;
+        font-size: large;
+        font-weight: 'bold'; 
+    }
+    .selected-od{
+        margin: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        font-size: medium;
+    }
+    .selected-shipping{
+        display: flex;
+        gap: 16px;
+        justify-content: baseline;
+        align-items: center;
+    }
+    .global-form-flex{
+        margin: 1px;
+        width: auto;
+        justify-content: flex-start;
     }
 
 }

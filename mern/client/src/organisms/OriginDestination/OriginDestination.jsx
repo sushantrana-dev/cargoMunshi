@@ -61,7 +61,7 @@ const OriginDestinationComp = ({ record, setSpinnerTrue, dbFlow ,selectedOption}
         <>
             {contextHolder}
             {isEmpty(freightKeys) ? (
-                <Card className="global-card card-common " title="Step: 2 Please Select the POD_NAME and DEL_NAME">
+                <Card bordered={false} className="global-card card-common " title="Step: 2 Please Select the POD_NAME and DEL_NAME">
                     <Form form={form} onFinish={handleFormSubmit} layout="vertical" style={{color: 'white'}} className='global-form-flex'>
                         <Form.Item
                             name="podName"
@@ -95,20 +95,18 @@ const OriginDestinationComp = ({ record, setSpinnerTrue, dbFlow ,selectedOption}
                                 ))}
                             </Select>
                         </Form.Item>
-                        <Form.Item>
-                            <Button size="large" type="primary" htmlType="submit">
-                                Next
-                            </Button>
-                        </Form.Item>
+                        <Button size="large" type="primary" htmlType="submit">
+                            Next
+                        </Button>
                     </Form>
                 </Card>
             ) : (
                 <>
                     <ModalComponent isModalOpen={isModalOpen} handleOK={closeModal} handleClose={closeModal} />
                     <Space size="middle" direction="horizontal" className="configured-card card-common">
-                        <div className="mt-1 flex gap-3">
-                            <span>Selected POD NAME: {selectedValues.podName}</span>
-                            <span>Selected DEL NAME: {selectedValues.delName}</span>
+                        <div className="selected-od">
+                            <span>Selected PORT OF DISCHARGE: {selectedValues.podName}</span>
+                            <span>Selected FINAL PLACE OF DELIVERY: {selectedValues.delName}</span>
                         </div>
                         <Button type="primary" icon={<EditOutlined />} onClick={openEditModal}>
                             Edit
