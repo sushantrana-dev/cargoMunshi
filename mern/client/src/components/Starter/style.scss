@@ -54,20 +54,20 @@
     box-shadow: 0 0 0 2px rgba(9, 30, 66, 0.5); /* Custom focus style with a subtle glow */
 }
 
-:where(.css-dev-only-do-not-override-m4timi) {
-    .ant-form-vertical {
-      .ant-form-item:not(.ant-form-item-horizontal) {
-        .ant-form-item-label {
-          > label {
-            margin: 0;
-            color: aliceblue;
-          }
+
+.ant-form-vertical {
+    .ant-form-item:not(.ant-form-item-horizontal) {
+    .ant-form-item-label {
+        > label {
+        margin: 0;
+        color: aliceblue;
         }
-      }
+    }
     }
 }
 
-:where(.css-dev-only-do-not-override-m4timi).ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector.ant-select-selection-placeholder{
+
+.ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector.ant-select-selection-placeholder{
 color: aqua;
 }
 .ant-select-selector.ant-select-selection-placeholder{
@@ -79,12 +79,12 @@ color: aqua;
 
 .global-form-flex{
     margin-left: 150px;
-    width: 1200PX;
+    width: auto;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
     gap: 12px;
-    align-items: flex-start;
+    align-items: center;
 }
 .update-section{
     color: aliceblue;
