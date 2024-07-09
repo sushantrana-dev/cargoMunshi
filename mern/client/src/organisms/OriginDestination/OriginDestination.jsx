@@ -105,8 +105,8 @@ const OriginDestinationComp = ({ record, setSpinnerTrue, dbFlow ,selectedOption}
                     <ModalComponent isModalOpen={isModalOpen} handleOK={closeModal} handleClose={closeModal} />
                     <Space size="middle" direction="horizontal" className="configured-card card-common">
                         <div className="selected-od">
-                            <span>Selected PORT OF DISCHARGE: {selectedValues.podName}</span>
-                            <span>Selected FINAL PLACE OF DELIVERY: {selectedValues.delName}</span>
+                            <span>Selected Port of Discharge: {selectedValues.podName}</span>
+                            <span>Selected Final Plcae Of Delivery: {selectedValues.delName}</span>
                         </div>
                         <Button type="primary" icon={<EditOutlined />} onClick={openEditModal}>
                             Edit

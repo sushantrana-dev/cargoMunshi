@@ -3,6 +3,7 @@
     width: fit-content;
 }
 .ant-card-head{
+    text-wrap: wrap;
     color: azure !important;
 }
 /* Shared Styles */
@@ -94,6 +95,11 @@ color: aqua;
     width: 300px;
     flex-wrap: wrap;;
 }
+.val-selection{
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
 .statistic-header{
     display: flex;
     justify-content: space-between;
@@ -170,6 +176,7 @@ color: aqua;
         font-size: medium;
     }
     .selected-shipping{
+        font-size: medium;
         display: flex;
         gap: 16px;
         justify-content: baseline;

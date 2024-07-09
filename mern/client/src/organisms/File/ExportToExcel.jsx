@@ -7,7 +7,8 @@ const ExportToExcel = ({ data, fileName }) => {
     const fileExtension = '.xlsx';
 
     const exportToCSV = () => {
-        const ws = XLSX.utils.json_to_sheet([data]);
+        const updatedData= [{...data.DESTINATION_COST, ...data.TOTAL_COST_WITH_GST}]
+        const ws = XLSX.utils.json_to_sheet(updatedData);
         const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], {type: fileType});

@@ -25,6 +25,11 @@ const FreightForm = (props) => {
         PER: [],
         CARGO_TYPE: [],
     });
+    const [selectedCosts, setSelectedCosts] = useState([]);
+
+    const handleCostChange = (values) => {
+        setSelectedCosts(values);
+    };
     const [isModalOpen, setIsModalOpen] = useState(false);
     const toggleModalFlags = () => {
         console.log('flag:')
@@ -117,67 +122,109 @@ const FreightForm = (props) => {
             {/* {contextHolder} */}
             {isEmpty(quotation) ?
                 <Card title="Step:3" bordered={false} className='global-card card-common '>
-                   <Form layout="vertical" className='global-form-flex'
-      form={form}
-      onFinish={onFinish}>
-    <Form.Item label="PER" name="per"
-               rules={[{ required: true, message: 'Please select a PER' }]}>
-        <Select
-            showSearch
-            placeholder="Select PER"
-            optionFilterProp="label"
-            onChange={(value) => form.setFieldsValue({ PER: value })}
-            options={selectOptions?.PER ?? []}
-        />
-    </Form.Item>
-    <Form.Item label="Cargo Type" name="cargoType"
-               rules={[{ required: true, message: 'Please select a cargo type' }]}>
-        <Select
-            showSearch
-            placeholder="Select Cargo Type"
-            optionFilterProp="label"
-            onChange={(value) => form.setFieldsValue({ CARGO_TYPE: value })}
-            options={selectOptions?.CARGO_TYPE ?? []}
-        />
-    </Form.Item>
-    <Form.Item label="Weight in Metric Tonnes" name="weightRange"
-               rules={[{ required: true, message: 'Please enter the weight in MT' }]}>
-        <InputNumber min={0} placeholder="Enter Weight in MT" className='w-auto'/>
-    </Form.Item>
-    {!dbFlow ? (
-        <div className='flex gap-3'>
-            <Form.Item label="INCO TERMS" name="incoTerms"
-                       rules={[{ required: true, message: 'Please select INCO terms' }]}>
-                <Radio.Group onChange={e => setSelectedIncoTerm(e.target.value)}>
-                    <Radio className='text-white' value="EX_WORKS">EX WORKS</Radio>
-                    <Radio className='text-white' value="FCA">FCA</Radio>
-                    <Radio className='text-white' value="FOB">FOB</Radio>
-                </Radio.Group>
-            </Form.Item>
-            <div>{(selectedIncoTerm === 'EX_WORKS' || selectedIncoTerm === 'FCA') && (
-                <>
-                    <Form.Item label={`${selectedIncoTerm} Exchange Rate`} name="incoExchangeRate"
-                               rules={[{ required: true, message: `Please enter ${selectedIncoTerm} Exchange Rate` }]}>
-                        <InputNumber className='w-auto' min={0} placeholder={`Enter ${selectedIncoTerm} Exchange Rate`} />
-                    </Form.Item>
-                    <Form.Item label={`Price Rate`} name="incoPriceRate"
-                               rules={[{ required: true, message: `Please enter ${selectedIncoTerm} PRICE Rate` }]}>
-                        <InputNumber min={0} placeholder={`Enter ${selectedIncoTerm} PRICE Rate`} className='w-auto' />
-                    </Form.Item>
-                </>
-            )}</div>
-            <Form.Item label="Ocean Freight Price" name="oceanFreightExPrice"
-                       rules={[{ required: true, message: 'Please enter the Ocean Freight Price' }]}>
-                <InputNumber min={0} placeholder="Enter Price" className='w-auto' />
-            </Form.Item>
-            <Form.Item label="Ocean Freight Exchange Rate" name="oceanFreightExRate"
-                       rules={[{ required: true, message: 'Please enter the Ocean Freight Exchange Rate' }]}>
-                <InputNumber min={0} placeholder="Enter Exchange Rate" className='w-auto' />
-            </Form.Item>
-        </div>
-    ) :
-        <div className='update-section'> Enter the Values to be Updated in the DB
-            <Form.Item name="DESTINATION_COST_THC" label="THC Cost"
+                    <Form layout="vertical" className='global-form-flex'
+                        form={form}
+                        onFinish={onFinish}>
+                        <Form.Item label="PER" name="per"
+                            rules={[{ required: true, message: 'Please select a PER' }]}>
+                            <Select
+                                showSearch
+                                placeholder="Select PER"
+                                optionFilterProp="label"
+                                onChange={(value) => form.setFieldsValue({ PER: value })}
+                                options={selectOptions?.PER ?? []}
+                            />
+                        </Form.Item>
+                        <Form.Item label="Cargo Type" name="cargoType"
+                            rules={[{ required: true, message: 'Please select a cargo type' }]}>
+                            <Select
+                                showSearch
+                                placeholder="Select Cargo Type"
+                                optionFilterProp="label"
+                                onChange={(value) => form.setFieldsValue({ CARGO_TYPE: value })}
+                                options={selectOptions?.CARGO_TYPE ?? []}
+                            />
+                        </Form.Item>
+                        <Form.Item label="Weight in Metric Tonnes" name="weightRange"
+                            rules={[{ required: true, message: 'Please enter the weight in MT' }]}>
+                            <InputNumber min={0} placeholder="Enter Weight in MT" className='w-auto' />
+                        </Form.Item>
+                        {!dbFlow ? (
+                            <div className='flex gap-3 flex-wrap'>
+                                <Form.Item label="INCO TERMS" name="incoTerms"
+                                    rules={[{ required: true, message: 'Please select INCO terms' }]}>
+                                    <Radio.Group onChange={e => setSelectedIncoTerm(e.target.value)}>
+                                        <Radio className='text-white' value="EX_WORKS">EX WORKS</Radio>
+                                        <Radio className='text-white' value="FCA">FCA</Radio>
+                                        <Radio className='text-white' value="FOB">FOB</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                                <div>{(selectedIncoTerm === 'EX_WORKS' || selectedIncoTerm === 'FCA') && (
+                                    <>
+                                        <Form.Item label={`${selectedIncoTerm} Exchange Rate`} name="incoExchangeRate"
+                                            rules={[{ required: true, message: `Please enter ${selectedIncoTerm} Exchange Rate` }]}>
+                                            <InputNumber className='w-auto' min={0} placeholder={`Enter ${selectedIncoTerm} Exchange Rate`} />
+                                        </Form.Item>
+                                        <Form.Item label={`Price Rate`} name="incoPriceRate"
+                                            rules={[{ required: true, message: `Please enter ${selectedIncoTerm} PRICE Rate` }]}>
+                                            <InputNumber min={0} placeholder={`Enter ${selectedIncoTerm} PRICE Rate`} className='w-auto' />
+                                        </Form.Item>
+                                    </>
+                                )}</div>
+                                <Form.Item label="Ocean Freight Price" name="oceanFreightExPrice"
+                                    rules={[{ required: true, message: 'Please enter the Ocean Freight Price' }]}>
+                                    <InputNumber min={0} placeholder="Enter Price" className='w-auto' />
+                                </Form.Item>
+                                <Form.Item label="Ocean Freight Exchange Rate" name="oceanFreightExRate"
+                                    rules={[{ required: true, message: 'Please enter the Ocean Freight Exchange Rate' }]}>
+                                    <InputNumber min={0} placeholder="Enter Exchange Rate" className='w-auto' />
+                                </Form.Item>
+                            </div>
+                        ) :
+                            <div className='update-section'> Enter the Values to be Updated in the DB
+                                <Form.Item label="Select Keys to Update" name="selectedCosts">
+                                    <Select
+                                        mode="multiple"
+                                        allowClear
+                                        placeholder="Select costs"
+                                        onChange={handleCostChange}
+                                    >
+                                        <Option value="THC">THC Cost</Option>
+                                        <Option value="IHC">IHC Cost</Option>
+                                        <Option value="LOCAL_AND_DO">Local and D/O Cost</Option>
+                                        <Option value="CIS">CIS Cost</Option>
+                                    </Select>
+                                </Form.Item>
+                               <div className='val-selection'>{selectedCosts.includes('THC') && (
+                                    <Form.Item label="THC Cost" name="THC"
+                                        rules={[{ required: true, message: 'Please enter the THC Cost' }]}>
+                                        <InputNumber min={0} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                )}
+
+                                {selectedCosts.includes('IHC') && (
+                                    <Form.Item label="IHC Cost" name="IHC"
+                                        rules={[{ required: true, message: 'Please enter the IHC Cost' }]}>
+                                        <InputNumber min={0} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                )}
+
+                                {selectedCosts.includes('LOCAL_AND_DO') && (
+                                    <Form.Item label="Local and DO Cost" name="LOCAL_AND_DO"
+                                        rules={[{ required: true, message: 'Please enter the Local and DO Cost' }]}>
+                                        <InputNumber min={0} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                )}
+
+                                {selectedCosts.includes('CIS') && (
+                                    <Form.Item label="CIS Cost" name="CIS"
+                                        rules={[{ required: true, message: 'Please enter the CIS Cost' }]}>
+                                        <InputNumber min={0} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                )}
+</div>
+
+                                {/* <Form.Item name="DESTINATION_COST_THC" label="THC Cost"
                        rules={[{ required: true, message: 'Please enter the THC Cost' }]}>
                 <InputNumber min={0} />
             </Form.Item>
@@ -192,14 +239,14 @@ const FreightForm = (props) => {
             <Form.Item name="DESTINATION_COST_CIS" label="CIS Cost"
                        rules={[{ required: true, message: 'Please enter the CIS Cost' }]}>
                 <InputNumber min={0} />
-            </Form.Item>
-        </div>}
-    <Form.Item>
-        <Button size="large" type="primary" htmlType="submit">
-            {dbFlow ? 'Make Updates' : 'Get Quotation'}
-        </Button>
-    </Form.Item>
-</Form></Card> : <> <ModalComponent isModalOpen={isModalOpen} handleOK={toggleModalFlags} handleClose={toggleModalFlagClose} />
+            </Form.Item> */}
+                            </div>}
+                        <Form.Item>
+                            <Button size="large" type="primary" htmlType="submit">
+                                {dbFlow ? 'Make Updates' : 'Get Quotation'}
+                            </Button>
+                        </Form.Item>
+                    </Form></Card> : <> <ModalComponent isModalOpen={isModalOpen} handleOK={toggleModalFlags} handleClose={toggleModalFlagClose} />
                     <Space size="middle" direction="horizontal" className='configured-card card-common'>
                         <div className='m-4 flex gap-2 flex-wrap'><span>Selected cargoType:
                             <b> {selectedValues?.cargoType}</b></span>
