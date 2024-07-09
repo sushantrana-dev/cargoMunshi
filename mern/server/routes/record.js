@@ -205,12 +205,20 @@ router.put("/update", async (req, res) => {
 
     // Prepare the updateDetails with conditional $set
     let updateDetails = { $set: {} };
-    const fieldsToUpdate = {
-      "DESTINATION_COST.THC": req.body.DESTINATION_COST_THC,
-      "DESTINATION_COST.IHC": req.body.DESTINATION_COST_IHC,
-      "DESTINATION_COST.LOCAL_AND_DO": req.body.DESTINATION_COST_LOCAL_AND_DO,
-      "DESTINATION_COST.CIS": req.body.DESTINATION_COST_CIS
-    };
+    const fieldsToUpdate = {};
+
+    if (!req.body.DESTINATION_COST_THC) {
+        fieldsToUpdate["DESTINATION_COST.THC"] = req.body.DESTINATION_COST_THC;
+    }
+    if (!req.body.DESTINATION_COST_IHC) {
+        fieldsToUpdate["DESTINATION_COST.IHC"] = req.body.DESTINATION_COST_IHC;
+    }
+    if (!req.body.DESTINATION_COST_LOCAL_AND_DO) {
+        fieldsToUpdate["DESTINATION_COST.LOCAL_AND_DO"] = req.body.DESTINATION_COST_LOCAL_AND_DO;
+    }
+    if (!req.body.DESTINATION_COST_CIS) {
+        fieldsToUpdate["DESTINATION_COST.CIS"] = req.body.DESTINATION_COST_CIS;
+    }
 
     // Only add fields that have a truthy value
     for (const [key, value] of Object.entries(fieldsToUpdate)) {
